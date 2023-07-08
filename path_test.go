@@ -42,7 +42,7 @@ func TestPaths(t *testing.T) {
 		{"Q2", Q(2), 6},
 		{"K4", K(4), 15},
 		{"tree", tree(5), 3},
-		{"star", star(5), 5},
+		{"star", star(5), 4},
 	}
 
 	for _, test := range tests {
