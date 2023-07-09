@@ -1,5 +1,7 @@
 package graph
 
+import "fmt"
+
 type Edge[K comparable] interface {
 	From() Node[K]
 	To() Node[K]
@@ -44,6 +46,10 @@ func (e edge[K]) Reverse() Edge[K] {
 		to:     e.from,
 		weight: e.weight,
 	}
+}
+
+func (e edge[K]) String() string {
+	return fmt.Sprintf("%v -> %v", e.from.ID(), e.to.ID())
 }
 
 //--------------------
