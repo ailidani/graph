@@ -59,8 +59,8 @@ func CyclicNode[K comparable](g Graph[K], v Node[K]) bool {
 	return visit(g, v, colors)
 }
 
-// Cycle returns the first cycle with vertices
-func Cycle[K comparable](g Graph[K]) []Node[K] {
+// CyclePath returns the first cycle with vertices
+func CyclePath[K comparable](g Graph[K]) []Node[K] {
 	colors := make(map[K]color)
 	// set all nodes color to white
 	nodes := g.Nodes()

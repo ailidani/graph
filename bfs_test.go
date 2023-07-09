@@ -14,22 +14,22 @@ func TestBFS(t *testing.T) {
 	}{
 		{
 			name:  "line",
-			graph: line(5),
+			graph: Line(5),
 			want:  [][]int{{0}, {1}, {2}, {3}, {4}},
 		},
 		{
 			name:  "loop",
-			graph: loop(5),
+			graph: Cycle(5),
 			want:  [][]int{{0}, {1}, {2}, {3}, {4}},
 		},
 		{
 			name:  "start",
-			graph: star(5),
+			graph: Star(5),
 			want:  [][]int{{0}, {1, 2, 3, 4}},
 		},
 		{
 			name:  "tree",
-			graph: tree(6),
+			graph: Tree(6),
 			want:  [][]int{{0}, {1, 2}, {3, 4, 5}},
 		},
 		{
