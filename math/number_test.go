@@ -32,7 +32,7 @@ func TestSign(t *testing.T) {
 	}
 	for _, test := range tests {
 		if Sign(test.n) != test.expect {
-			t.Errorf("Sign(%d) != %d", test.n, test.expect)
+			t.Errorf("Sign(%f) != %f", test.n, test.expect)
 		}
 	}
 }
