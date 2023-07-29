@@ -2,6 +2,8 @@ package graph
 
 import (
 	"math"
+
+	"github.com/ailidani/graph/slice"
 )
 
 //----------
@@ -55,7 +57,7 @@ func (s Shortest[K]) To(v Node[K]) ([]Node[K], float64) {
 		}
 		n--
 	}
-	Reverse(path)
+	slice.Reverse(path)
 	return path, math.Min(weight, s.dist[s.index[v.ID()]])
 }
 
