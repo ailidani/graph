@@ -13,10 +13,10 @@ import (
 func Line(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < n; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 0; i < n-1; i++ {
-		g.AddEdge(NewEdge(g.Node(i), g.Node(i+1)))
+		g.Connect(i, i+1)
 	}
 	return g
 }
@@ -25,13 +25,13 @@ func Line(n int) Graph[int] {
 *  0 -> 1 -> 2 -> 3 -> 4
 *  |_ _ _ _ _ _ _ _ _ _|
  */
-func Cycle(n int) Graph[int] {
+func Ring(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < n; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 0; i < n; i++ {
-		g.AddEdge(NewEdge(g.Node(i), g.Node((i+1)%n)))
+		g.Connect(i, (i+1)%n)
 	}
 	return g
 }
@@ -46,10 +46,10 @@ func Cycle(n int) Graph[int] {
 func Star(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < n; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 1; i < n; i++ {
-		g.AddEdge(NewEdge(g.Node(0), g.Node(i)))
+		g.Connect(0, i)
 	}
 	return g
 }
@@ -64,10 +64,10 @@ func Star(n int) Graph[int] {
 func Tree(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < n; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 1; i < n; i++ {
-		g.AddEdge(NewEdge(g.Node((i-1)/2), g.Node(i)))
+		g.Connect((i-1)/2, i)
 	}
 	return g
 }
@@ -81,15 +81,15 @@ func Tree(n int) Graph[int] {
 func K(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < n; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 0; i < n; i++ {
 		for j := 0; j < n; j++ {
 			if i == j {
 				continue
 			}
-			g.AddEdge(NewEdge(g.Node(i), g.Node(j)))
-			g.AddEdge(NewEdge(g.Node(j), g.Node(i)))
+			g.Connect(i, j)
+			g.Connect(j, i)
 		}
 	}
 	return g
@@ -106,11 +106,11 @@ func K(n int) Graph[int] {
 func Q(n int) Graph[int] {
 	g := New[int]()
 	for i := 0; i < 1<<uint(n); i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := 0; i < 1<<uint(n); i++ {
 		for j := 0; j < n; j++ {
-			g.AddEdge(NewEdge(g.Node(i), g.Node(i^(1<<uint(j)))))
+			g.Connect(i, i^(1<<uint(j)))
 		}
 	}
 	return g
@@ -125,20 +125,16 @@ func Q(n int) Graph[int] {
  */
 func BronKerboschGraph() Graph[int] {
 	g := New[int]()
-	g.AddNode(NewNode(0))
-	g.AddNode(NewNode(1))
-	g.AddNode(NewNode(2))
-	g.AddNode(NewNode(3))
-	g.AddNode(NewNode(4))
-	g.AddNode(NewNode(5))
-
-	g.AddEdge(NewEdge(g.Node(0), g.Node(1)))
-	g.AddEdge(NewEdge(g.Node(0), g.Node(4)))
-	g.AddEdge(NewEdge(g.Node(1), g.Node(2)))
-	g.AddEdge(NewEdge(g.Node(1), g.Node(4)))
-	g.AddEdge(NewEdge(g.Node(2), g.Node(3)))
-	g.AddEdge(NewEdge(g.Node(3), g.Node(4)))
-	g.AddEdge(NewEdge(g.Node(3), g.Node(5)))
+	for i := 0; i < 6; i++ {
+		g.Add(i)
+	}
+	g.Connect(0, 1)
+	g.Connect(0, 4)
+	g.Connect(1, 2)
+	g.Connect(1, 4)
+	g.Connect(2, 3)
+	g.Connect(3, 4)
+	g.Connect(3, 5)
 	return g
 }
 
@@ -146,13 +142,13 @@ func BronKerboschGraph() Graph[int] {
 func PrimeSumGraph(from, to int) Graph[int] {
 	g := New[int]()
 	for i := from; i <= to; i++ {
-		g.AddNode(NewNode(i))
+		g.Add(i)
 	}
 	for i := from; i <= to; i++ {
 		for j := i + 1; j <= to; j++ {
 			if math.IsPrime(i + j) {
-				g.AddEdge(NewEdge(g.Node(i), g.Node(j)))
-				g.AddEdge(NewEdge(g.Node(j), g.Node(i)))
+				g.Connect(i, j)
+				g.Connect(j, i)
 			}
 		}
 	}

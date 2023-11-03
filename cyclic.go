@@ -12,17 +12,17 @@ const (
 	black              // visited nodes
 )
 
-func visit[K comparable](g Graph[K], v Node[K], colors map[K]color) bool {
-	colors[v.ID()] = gray
-	for _, u := range g.From(v.ID()) {
+func visit[K comparable](g Graph[K], v K, colors map[K]color) bool {
+	colors[v] = gray
+	for _, u := range g.From(v) {
 		if colors[u.ID()] == gray {
 			return true
 		}
-		if colors[u.ID()] == white && visit(g, u, colors) {
+		if colors[u.ID()] == white && visit(g, u.ID(), colors) {
 			return true
 		}
 	}
-	colors[v.ID()] = black
+	colors[v] = black
 	return false
 }
 
@@ -40,7 +40,7 @@ func Cyclic[K comparable](g Graph[K]) bool {
 	for nodes.Next() {
 		v := nodes.Node()
 		if colors[v.ID()] == white {
-			if visit(g, v, colors) {
+			if visit(g, v.ID(), colors) {
 				return true
 			}
 		}
@@ -48,7 +48,7 @@ func Cyclic[K comparable](g Graph[K]) bool {
 	return false
 }
 
-func CyclicNode[K comparable](g Graph[K], v Node[K]) bool {
+func CyclicNode[K comparable](g Graph[K], v K) bool {
 	colors := make(map[K]color)
 	// set all nodes color to white
 	nodes := g.Nodes()
@@ -73,7 +73,7 @@ func CyclePath[K comparable](g Graph[K]) []Node[K] {
 	for nodes.Next() {
 		v := nodes.Node()
 		if colors[v.ID()] == white {
-			if visit(g, v, colors) {
+			if visit(g, v.ID(), colors) {
 				cycle := make([]Node[K], 0)
 				for u, color := range colors {
 					if color == gray {

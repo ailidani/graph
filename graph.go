@@ -6,7 +6,7 @@ type Graph[K comparable] interface {
 	// Size of a graph is the number of edges in the graph
 	Size() int
 	Node(K) Node[K]
-	Edge(from K, to K) Edge[K]
+	Edge(from, to K) Edge[K]
 	Nodes() Nodes[K]
 	Edges() Edges[K]
 	From(K) []Node[K]
@@ -23,7 +23,10 @@ type WeightedGraph[K comparable] interface {
 }
 
 type Builder[K comparable] interface {
-	// AddNode adds a node to the graph, panics if node ID exist.
+	// Add adds default type node to the graph, return error if node ID exist.
+	Add(K) error
+	Connect(from, to K) error
+	// AddNode adds a node to the graph, return error if node ID exist.
 	AddNode(Node[K]) error
 	RemoveNode(K) error
 	// AddEdge adds an edge to the graph, adds from and to nodes if not exist.
@@ -49,8 +52,10 @@ func New[K comparable]() Graph[K] {
 // Graph
 //---------------------------
 
+// Order of a graph is the number of vertices in the graph
 func (g graph[K]) Order() int { return len(g.nodes) }
 
+// Size of a graph is the number of edges in the graph
 func (g graph[K]) Size() int {
 	sum := 0
 	for _, edges := range g.from {
@@ -78,16 +83,10 @@ func (g graph[K]) Edge(from, to K) Edge[K] {
 }
 
 func (g graph[K]) Nodes() Nodes[K] {
-	if len(g.nodes) == 0 {
-		return nil
-	}
 	return NewNodes(g.nodes)
 }
 
 func (g graph[K]) Edges() Edges[K] {
-	if len(g.nodes) == 0 {
-		return nil
-	}
 	return NewEdges(g.from)
 }
 
@@ -140,6 +139,13 @@ func (g graph[K]) HasEdge(from, to K) bool {
 // Graph Builder
 //---------------------------
 
+func (g *graph[K]) Add(n K) error {
+	if g.HasNode(n) {
+		return ErrNodeExist
+	}
+	return g.AddNode(NewNode(n))
+}
+
 func (g *graph[K]) AddNode(n Node[K]) error {
 	id := n.ID()
 	if g.HasNode(id) {
@@ -165,6 +171,26 @@ func (g *graph[K]) RemoveNode(id K) error {
 		delete(to, id)
 	}
 	return nil
+}
+
+func (g *graph[K]) Connect(from, to K) error {
+	if from == to {
+		return ErrSelfEdge
+	}
+
+	if g.HasEdge(from, to) {
+		return ErrEdgeExist
+	}
+
+	if !g.HasNode(from) {
+		return ErrNodeNotFound
+	}
+
+	if !g.HasNode(to) {
+		return ErrNodeNotFound
+	}
+
+	return g.AddEdge(NewEdge(g.Node(from), g.Node(to)))
 }
 
 func (g *graph[K]) AddEdge(e Edge[K]) error {

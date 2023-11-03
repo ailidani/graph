@@ -1,0 +1,5 @@
+*.sh
+*.db
+*.csv
+*.dot
+.DS_Store

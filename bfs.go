@@ -10,22 +10,22 @@ import (
 //---------------------------
 
 // BFS visits breath first search nodes from a given source node.
-func BFS[K comparable](g Graph[K], root Node[K], visit func(n Node[K], depth int)) {
+func BFS[K comparable](g Graph[K], root K, visit func(n Node[K], depth int)) {
 	BFSUntil(g, root, func(n Node[K], depth int) bool {
 		visit(n, depth)
 		return false
 	})
 }
 
-func BFSUntil[K comparable](g Graph[K], root Node[K], visitUntil func(n Node[K], depth int) bool) Node[K] {
-	if g.Node(root.ID()) == nil {
+func BFSUntil[K comparable](g Graph[K], root K, visitUntil func(n Node[K], depth int) bool) Node[K] {
+	if g.Node(root) == nil {
 		panic("root not found")
 	}
 
 	visited := set.New[K]()
 	queue := queue.New[K]()
-	visited.Add(root.ID())
-	queue.Push(root.ID())
+	visited.Add(root)
+	queue.Push(root)
 
 	var depth int = 0
 	var children int = 0

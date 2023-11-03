@@ -9,7 +9,7 @@ func Connected[K comparable](g Graph[K]) bool {
 			continue
 		}
 		visited[n.ID()] = true
-		BFS(g, n, func(n Node[K], depth int) {
+		BFS(g, n.ID(), func(n Node[K], depth int) {
 			visited[n.ID()] = true
 		})
 	}

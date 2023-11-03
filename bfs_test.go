@@ -19,7 +19,7 @@ func TestBFS(t *testing.T) {
 		},
 		{
 			name:  "loop",
-			graph: Cycle(5),
+			graph: Ring(5),
 			want:  [][]int{{0}, {1}, {2}, {3}, {4}},
 		},
 		{
@@ -41,7 +41,7 @@ func TestBFS(t *testing.T) {
 
 	for _, test := range tests {
 		var got [][]int
-		BFS(test.graph, test.graph.Node(0), func(n Node[int], depth int) {
+		BFS(test.graph, 0, func(n Node[int], depth int) {
 			if depth >= len(got) {
 				got = append(got, []int(nil))
 			}

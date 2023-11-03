@@ -16,7 +16,7 @@ func TestPathsBetween(t *testing.T) {
 		{"line", Line(5), 4, 1},
 		{"Q2", Q(2), 3, 2},
 		{"K4", K(4), 3, 5},
-		{"loop", Cycle(5), 4, 1},
+		{"loop", Ring(5), 4, 1},
 		{"tree", Tree(5), 4, 1},
 		{"star", Star(5), 4, 1},
 	}
@@ -38,7 +38,7 @@ func TestPaths(t *testing.T) {
 		int
 	}{
 		{"line", Line(5), 1},
-		{"loop", Cycle(5), 1},
+		{"loop", Ring(5), 1},
 		{"Q2", Q(2), 6},
 		{"K4", K(4), 15},
 		{"tree", Tree(5), 3},
